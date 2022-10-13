@@ -97,5 +97,228 @@ Podemos ter relacioanmento: unidirecional 1:1
                             bidirecional 1:n
                             multidirecional n:n
 
+## Pilares POO
+
+- Encapsulamento (Se trata de um dos elementos que adicionam segurança à aplicação em uma programação orientada a objetos 
+pelo fato de esconder as propriedades, criando uma espécie de caixa preta.). O Objeto é a capsula e esse objeto é um 
+agrupador, que agrupa atributos e métodos.
+
+Modificadores de acesso:
+
+public (todos podem acessar)
+
+protected: vai depender da herança, ou seja ele pode acessar um atributo em outro pacote desde que ele seja herdado, ele é visivel 
+no proprio pacote, ele é visivel na própria classe, e ele é tranferido por herança para outra classe
+
+package(default)(apenas podem acessar quando estão dentro do mesmo pacote), por padrão o nível de visibilidade é pacote, ele é visível
+na própria classe e no pacote;
+
+private (o mais restrito)
+
+- Herança (O reuso de código é uma das grandes vantagens da programação orientada a objetos.)
+- Polimorfismo( Em outras palavras, o polimorfismo consiste na alteração do funcionamento interno de um método herdado de um objeto pai. Ex- Animal: mamifero: reptil...)
+- abstração (quando vc desenvolver um sistema um objeto não precisa necessariamente ter todas as suas caracteríticas modeladas no sistema, e sim apenas o que realmente faz sentido para o sistema)
 
 
+## Reuso de código
+
+Composição e herança.
+
+No mundo real nós temos mais composição que herança.
+
+Herança você vai herdar comportamentos da classe pai.
+Ex: =e um animal-> é um mamifero-> é um anfibio-> é um mamifero aquatico-> é um mamifero terrestre -> é um sapo-> é um carro...
+Todos os atributos que estão na classe pai , o filho recebe no caso de herança. Quanto mais especifico você vai ficando
+mais atributos você terá.
+
+Nem toda Hierarquia gera herança.
+
+## Polimorfismo
+
+Existem dois tipos:
+
+- Estático (sobrecarga), podemos criar métodos com o mesmo nome, mas os parametrso diferentes isso é sobrecarga;
+Ele é estatico por que eu posso usar as multiplas formas  diferentes de usar o mesmo método, ou seja não ocorre de
+forma dinâmica, ou seja polimorfismo estatico é == a sobrecarga
+
+- Para se ter um polimorfismo Dinâmico, é necessário ter Herança, e da herança é que temos o polimorfismo dinâmico;
+Ex: Civic c = new Civic();
+Carro c=new Ferrari()
+consigo criar uma classe generica e atribuir outras variaveis
+c= new Fusca();
+
+Ocorre sempre do tipo mais especifico para o generico
+
+
+## Abstração
+
+Pegar um conceito do mundo real e simplificar para dentro do seu software.
+Nem tudo que está no mundo real será mapeado no software e nem tudo que
+está mapeado no mundo real está no software. 
+
+
+Aluno -> aluno Bolsista
+
+
+## Enum
+
+An enum é uma "classe" especial que representa um grupo de constantes (variáveis ​​imutáveis, como finalvariáveis).
+As enumerações servem ao propósito de representar um grupo de constantes nomeadas em uma linguagem de programação. 
+Por exemplo, os 4 naipes em um baralho de cartas podem ser 4 enumeradores chamados Paus, Ouros, Copas e Espadas, 
+pertencentes a um tipo enumerado chamado Naipe. Outros exemplos incluem tipos naturais enumerados (como os planetas, 
+dias da semana, cores, direções, etc.). 
+
+Declaração de enum em Java: A declaração de enum pode ser feita fora de uma classe ou dentro de uma classe, mas não dentro de um método.
+
+Pontos importantes do enum:
+
+Cada enum é implementado internamente usando Class.
+/* internamente acima do enum A cor é convertida para
+classe Cor
+{
+public static final Color RED = new Color();
+public static final Color AZUL = new Color();
+public static final Color GREEN = new Color();
+}*/
+Cada constante enum representa um objeto do tipo enum.
+tipo enum pode ser passado como um argumento para instruções switch .
+
+/ A Java program to demonstrate working on enum
+// in switch case (Filename Test. Java)
+
+import java.util.Scanner;
+
+// An Enum class
+enum Day {
+SUNDAY,
+MONDAY,
+TUESDAY,
+WEDNESDAY,
+THURSDAY,
+FRIDAY,
+SATURDAY;
+}
+
+// Driver class that contains an object of "day" and
+// main().
+public class Test {
+Day day;
+
+    // Constructor
+    public Test(Day day) { this.day = day; }
+ 
+    // Prints a line about Day using switch
+    public void dayIsLike()
+    {
+        switch (day) {
+        case MONDAY:
+            System.out.println("Mondays are bad.");
+            break;
+        case FRIDAY:
+            System.out.println("Fridays are better.");
+            break;
+        case SATURDAY:
+        case SUNDAY:
+            System.out.println("Weekends are best.");
+            break;
+        default:
+            System.out.println("Midweek days are so-so.");
+            break;
+        }
+    }
+ 
+    // Driver method
+    public static void main(String[] args)
+    {
+        String str = "MONDAY";
+        Test t1 = new Test(Day.valueOf(str));
+        t1.dayIsLike();
+    }
+}
+
+Cada constante enum é sempre implicitamente public static final . Como é estático , podemos acessá-lo usando o enum Name. Como é final , não podemos criar enums filhos.
+Podemos declarar o método main() dentro do enum. Portanto, podemos invocar enum diretamente do prompt de comando.
+
+Enum e Herança:
+
+Todos os enums estendem implicitamente a classe java.lang.Enum . Como uma classe só pode estender um pai em Java, um enum não pode estender mais nada.
+O método toString() é substituído em java.lang.Enum class , que retorna o nome da constante enum.
+enum pode implementar muitas interfaces.
+
+métodos values(), ordinal() e valueOf():
+
+Esses métodos estão presentes em java.lang.Enum .
+O método values() pode ser usado para retornar todos os valores presentes dentro do enum.
+A ordem é importante em enums. Usando o método ordinal() , cada índice de constante enum pode ser encontrado, assim como um índice de array.
+valueOf() retorna a constante enum do valor de string especificado, se existir.
+
+enum e construtor:
+
+enum pode conter um construtor e é executado separadamente para cada constante enum no momento do carregamento da classe enum.
+Não podemos criar objetos enum explicitamente e, portanto, não podemos invocar o construtor enum diretamente.
+
+
+## Herança
+
+o this palavra-chave aponta para uma referência da classe atual, enquanto a super palavra-chave aponta para uma referência 
+da classe pai. this pode ser usado para acessar variáveis e métodos da classe atual, e super pode ser usado para acessar 
+variáveis e métodos da classe pai da subclasse.
+
+Chamar o construtor da classe atual você usa o this.
+Chamar o construtor da classe pai você usa o super();
+
+
+## Interface
+
+Interface tem métodos que não possuem corpos.
+Ela define apenas a necessidade de você implementar algo quando uma classe herda de uma interface.
+
+Uma classe herda de apenas uma classe. Já uma classe em relação a uma interface pode herdar várias interfaces.
+métodos em interface é public por padrão, mesmo que eu não coloque a palavra public. 
+E todos os métodos dentro da interface são abastract mesmo que não esteja explicito, significa que não tem corpo(par de chaves).
+Dentro de interface os modificadores abstract e public são implicitos
+
+usamos implements para herdar uma interface
+usamos extendes para herdar outra classe;
+
+
+## Classe abstrata
+
+- Classe concreta é onde 100% dos métodos estão implementados. Ou seja os métodos tem corpo, ou seja ele tem um par de 
+chaves e colocamos a implementação. Se o método retorna String obrigatoriamente ele tem que ter um return retornando uma String
+
+- Interface: é uma estrutura que tem os métodos , mas os métodos não tem corpo, tem apenas a definição de método, mas dentro da
+interface não se sabe como implementar aquele método. E toda classe que implenta uma interface precisa determinar esses métodos;
+Interface tem 0% dos métodos implementados.
+
+- Classe abstrata: é a classe que pode tanto ter todos os métodos abstratos, quanto parte dos métodos abstratos, como ela pode ser
+completamente com todos os métodos definidos. A primeira consequencia de se ter uma classe abstrata é que ela não pode ser instanciada.
+
+public abstract class Pessoa{
+
+//Você não pode mais instanciar
+//Pessoa p = new Pessoa();
+
+}
+
+Para que eu quero criar uma classe abstract ? quando eu tenho herança , quando eu quero criar uma classe pai que quero que seja herdada.
+Ou seja eu vou ter acesso aos atributos e métodos quando eu herdar para outras classes.  (Extends)
+
+## Funções Lambdas
+
+O que são funções lambda Java?
+Simplificando um pouco a definição, uma função lambda é uma função sem declaração, isto é, não é necessário colocar um 
+nome, um tipo de retorno e o modificador de acesso. A ideia é que o método seja declarado no mesmo lugar em que será usado.
+
+Dentro de lambda existe um conceitto de interface funcional. Existe uma interface chamada @FunctionalInterface ela força você ter
+um único método  abstract dentro de cada interface. E podemos criar métodos defaults Através das interfaces funcionais 
+podemos definir as lambdas.
+
+Package java.util.function
+
+
+Processo automatico autoboxing
+
+--------------> boxing (primitivo para Classe)
+double -> Double
+<--------------unboxing(Classe para primitivo)
