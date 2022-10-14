@@ -3,6 +3,7 @@ package lambdas.desafio;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+
 public class Main {
     public static void main(String[] args) {
 
@@ -14,9 +15,9 @@ public class Main {
         * 5. Formatar: R$1234,56
         *
         */
-        Produto p =new Produto("iPad",2600.06,.15);
+       Produtos p =new Produtos("iPad",2600,0.15);
 
-        Function<Produto,Double> precoDesc=
+        Function<Produtos,Double> precoDesc=
                 prod-> prod.preco*(1-prod.desconto);
 
         UnaryOperator<Double> impostoMunicipal=
