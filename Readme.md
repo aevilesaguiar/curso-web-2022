@@ -1179,4 +1179,4 @@ Java 7: não é necessário repetir os parâmetros de tipo do lado direito da at
 Usa-se “<>” (válido para quaisquer quantidade de parâmetros de tipo)
 Observação: a ausência do parâmetro de tipo em uma classe genérica implica na utilização do tipo Object como default (será discutido mais adiante)
 
-
+==
