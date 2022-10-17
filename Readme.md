@@ -868,3 +868,315 @@ Podemos ter: Stream Ordenadas , que tem uma sequencia a ser seguida
              Stream Não ordenada 
              Stream de forma sequencia
              Paralel Stream ( várias linhas de execução processadas paralelamente)
+
+## Map
+
+Stream de dados (é uma sequencia de dados, list, array);
+
+Sequencia de numeros e eu quero aplicar uma transformação usando MAP:
+Nós passamos uma função para o MAP(UM LAMBDA EXPRESSION OU UMA REFERENCIA PARA O MÉTODO)
+e ele vai usar essa função para transformar cada elemento de tal forma que será gerado
+um outro Stream com o mesmo tamanho, ou seja o map vai pegar uma Stream de 8 elementos
+e vai gerar outra stream de 8 elementos e você vai passar uma função para o map que será responsável por
+mapear o elemento original do elemento que você quer gerar na nova Stream.
+O map na verdade é uma função que vai ajudar a transformar uma stream de dados emm outra stream de dados
+do mesmo tamanho com os dados mapeados(transformados). A regra é a função que você vai usar para transformar
+pode ser uma lambda expression, pode ser uma função, método...
+Posso usar quantos maps forem necessários para a minha lógica
+
+
+     __  ___ __  ___  __  ___ __  ___
+    | 3 | 1 | 7 | 4 | 6 | 8 | 10 | 9 | uma Stream de dados
+     --  --- --  --- --  ---  --  ---
+                ||
+                ||  MAP( e-> e*2)  lambda expression
+                \/
+     __  ___ __  ___  __  ___ __  ___
+    | 6 | 2 |14 | 8 |12 |16 | 20 |18 | um stream de dados mapeado
+     --  --- --  --- --  ---  --  ---
+                ||
+                ||  MAP( e-> e-2)  lambda expression
+                \/
+     __  ___ __  ___  __  ___ __  ___
+    | 4 | 0 |12 | 6 |10 |14 | 18 |16 | um stream de dados mapeado
+     --  --- --  --- --  ---  --  ---
+
+
+## Filter
+
+No filter precisamos usar um predicado(função), e ele vai informar se é true ou false;
+No filter eu posso ter uma quantidade menor de elementos ou até 0 dependendo do filtro
+Tudo depende do critério do filtro.
+
+     __  ___ __  ___  __  ___ __  ___
+    | 3 | 2 | 4 | 7 | 8 | 7 | 6  | 1 | uma Stream de dados
+     --  --- --  --- --  ---  --  ---
+                ||
+                ||  filter( n-> n % )  lambda expression
+                \/
+     ___ __  ___  __  
+    | 2 | 4 | 8 | 6 |  uma Stream de dados
+     --- --  --- --  
+
+
+Outro exemplo com objetos:
+
+            Produção
+
+     ------ ------ ----- ----
+    |  -   |  -   |  -  | -  |
+    | 1200 | 2356 | 30  | 97 |  uma Stream de dados
+     -----  ------ ----- -----
+                ||
+                ||  filter( p-> p.preco>=1000 )  lambda expression
+                \/
+             ______  _____    
+            | 1200 | 2356 |   um Stream de dados
+             -----  ------  
+
+## Reduce
+
+Transforma uma sequencia de dados/sequencia de objetos armazenad numa stream em algo completamente diferente , não precisa ter uma relação direta
+com o tipo;
+
+
+     __  ___ __  ___  __  ___ __  ___
+    | 7 | 3 | 4 | 2 | 8 | 1 | 2  | 8 | uma Stream de dados
+     --  --- --  --- --  ---  --  ---
+                ||
+                ||  reduce(acum, n) -> acum + n
+                \/
+     ___  ___  ___  ___  ___  ___   ___  ___
+    | 7 | 10 | 14 | 16 | 24 | 25 | 27  | 35 | uma Stream de dados
+     ---  ---  ---  ---  ---  ---  ---   ---
+
+    o acumulador eu defini como "0"
+    (acum, n) -> acum+n
+    (0,7) -> 0+7 =7 -
+                     |
+      _______________|      
+     | o acumulador agora é 7
+     v
+    (7, 3) -> 7+3 =10
+    (10,4) -> 10+4=14
+    (14,2) -> 14+2 =16
+    (16,8) -> 16+8 =24
+    (24,1) -> 24+1=25
+    (25,2) -> 25+2 =27 
+    (27,8) -> 27+8=35
+  
+O acumulador pode ser um objeto, array, tipo primitivo, lista, set, map...
+
+
+No reduce nós recebemos dois parametros, o primeiro é o acumulador e o segundo é o "n", o acumulador é um valor que você 
+pode dar um valor incial para ele se voc~e quiser, e esse valor pode ser passado para cada uma das iterações caso você queira
+esse acumulador passa por cada um dos elementos.
+
+Reduce diferente de map e filter é uma função terminadora semelhante forEach() .
+Reduce é uma função terminadora.
+
+## Tratamento de exceções
+
+temos dois tipos de erros que são:
+
+Erros de compilação: erros de compilação impedem o processo natural de você ter um arquivo .java -> com código fonte e gerar o arquivo .class
+O compilador não vai executar esse processo .java -> .class quando você tem um erro de compilação. E eles são mais fáceis de serem 
+encontrados, devido o java compilar o seu código para uma linguagem intermediária que é interpretada pela máquina virtual(JVM).
+
+Linguagens como PHP, Ruby e JS são linguagens interpretadas , ou seja o interpretador ler diretamente o código que você escreveu, então
+você não tem o conceito de erros de compilação, por que não tem processo de compilação. 
+
+Já o Java possui o processo de compilação, ou seja antes de executar um arquivo ele precisa passar pelo o processo de compilação.
+Não é o código fonte que é interpretado e sim o arquivo .class que usa uma linguagem intermediária (bytecode)
+![](../../Users/aesilva/AppData/Local/Temp/java-bytecode.png)
+
+
+Erros em tempo de Execução: São os erros que ocorrem quando o seu programa já foi compilado, quando o usuario está acessando o seu programa.
+Podem ser erros que foram previstos no momento do desenvolvimento aí você usa o tratamento de exceção.é necessário fazer validações
+prevendo erros ou seja lanço exceções.
+
+
+A mãe de todos os problemas que podem ocorrer em java é chamada de Throwable, então a partir
+de Throwable algo que pode ser lançado diferentes de outros mecanismos em java, uma exceção /um erro em java é 
+lançado,a sua aplicação interrompe e lança o erro, quando esse erro é lançado acontece uma parada naquele momento
+daquela funcionalidade/método(todo algoritmo em java acontece dentro de métodos, e eses métodos podem 
+lançar exceções, e também lambdas Expressions podem lançar exceções, sendo que lambda expression nada mais é que um método
+implementado a apartir de uma interface funcional então acaba sendo um método também).
+Então quando é lançado um erro você interrompe o processo e quem chamou o método é responsável por tratar o erro, ou simplesmente
+não fazer nada e esse erro vai propagando , mais em algum momento você vai precisar tratar.
+
+![](../../Users/aesilva/AppData/Local/Temp/b26b36859c1c149262e7e3f87f1d6259.png)
+
+Error e Exception herdam de Throwable.
+Error: é algo mais crítico,  o erro normalmente é lançado em algo que não pode ser recuperado.
+Ex: OutOfMemoryError: aplicação ficou sem memória
+
+Exception: você acaba tratando, como um desvio de fluxo, mas o programa normalmente continua funcionando
+
+![](../../Users/aesilva/AppData/Local/Temp/exception-hierarchy-in-java.png)
+
+
+Exceções não checadas (unchecked):
+
+Representam defeitos no programa (bugs).
+
+São subclasses de RuntimeException e são normalmente implementadas usando IllegalArgumentException, NullPointerException ou IllegalStateException.
+
+Um método não é obrigado a estabelecer uma política para as exceções não checadas lançadas por sua execução (e quase sempre nunca o fazem).
+
+int num1 = 10;
+int num2 = 0;
+int res = 0;
+
+res = num1 / num2; // ArithmeticException: / by zero;
+
+Possível solução:
+
+int num1 = 10;
+int num2 = 0;
+int res = 0;
+
+try {
+res = num1 / num2;
+} catch (ArithmeticException ex) {
+Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
+}
+
+
+Exceções checadas (checked):
+Representam condições inválidas em áreas fora do controle imediato do programa (problemas de entradas inválidas do usuário, banco de dados, falhas de rede, arquivos ausentes).
+
+São subclasses de Exception.
+
+Um método é obrigado a estabelecer uma política para todas as exceções checadas lançadas por sua implementação (ou passar a exceção checada mais acima na pilha, ou manipulá-la de alguma forma).
+
+Organização em classes:
+É um pouco confuso, mas note bem que RuntimeException (não checada) é por si só uma subclasse de Exception (checada).
+
+![](.Readme_images/4fa44b53.png)
+
+
+## Exceção Checada e não Checada
+
+Throwable é a classe que é a raiz de todas as exceções e erros dentro java.
+E todas as classes que estiverem abaixo de Throwable pode usar a palavra throw associado a uma classe.
+Throw usado para lançar a exceção.
+
+![](../../Users/aesilva/AppData/Local/Temp/exception-hierarchy-in-java.png)
+RunTimeException: Toda classe que herda de runtime exception é uma classe não checada , você não é obrigado a definir na 
+assinatura do método que você vai lançar uma runtimeException quem chama aquele método não é obrigado a tratar o erro usando try catch.
+
+Quando você lança Exception ou qualquer outra exceção que esteja sendo filho diretamente ou indiretamente você é obrigado a tratar
+esse erro. Apenas as exceções que estão em runtimeException que você não tem obrigatoriedade de tratar.
+
+Quando eu lanço uma exceção checada eu tenho que incluir na assinatura do método "throws" ou seja que ele lança uma determinada exceção.
+
+Ex:
+static void geraErro2() throws Exception{
+try {
+throw new Exception("Ocorreu um erro #02 - TRATEI O ERRO");
+}catch (Exception e){
+System.out.println("UFA passou"+e.getMessage());
+}
+}
+
+Uma exceção checada não conseguirá passar por todos os métodos despercebida. Ou você já trata ou passa para o outro método tratar.
+Já uma exceção não checada(runtime) ela consegue passar depercebida pelo os métodos, por que você trata se quisr e você não precisa declarar esses métodos
+diretamente na assinatura do método. Tudo que você herda de runtime o compilador não irá te obrigar a tratar ou declarar.
+
+Exceção checada você força o tratamento.
+
+Exceção não verificada EXTENDS RUNTIME EXCEPTION
+
+package excecao.personalizada;
+
+public class NumeroForaDoIntervaloException extends RuntimeException {
+
+    private String nomeDoAtributo;
+
+    public NumeroForaDoIntervaloException(String nomeDoAtributo){
+        this.nomeDoAtributo=nomeDoAtributo;
+
+    }
+
+
+
+    public String getMessage() {
+        return String.format("O atributo '%s' está fora do Intervalo",nomeDoAtributo);
+    }
+}
+
+
+Exceção  verificada EXTENDS  EXCEPTION
+
+package excecao.personalizada;
+
+public class NumeroForaDoIntervaloException extends Exception {
+
+    private String nomeDoAtributo;
+
+    public NumeroForaDoIntervaloException(String nomeDoAtributo){
+        this.nomeDoAtributo=nomeDoAtributo;
+
+    }
+
+
+
+    public String getMessage() {
+        return String.format("O atributo '%s' está fora do Intervalo",nomeDoAtributo);
+    }
+}
+
+
+Você pode optar por trablhar com exceções checadas e não checadas. A maioria opta pela não checadas.
+
+
+## Finally
+
+Usamos o finally quando queremos que algo seja forçado a ser feito, mesmo que exista um erro. Exemplo fexhar a conexão de um BD 
+Você fecha a conexão no finally.
+Independente de qualquer erro o finally é executado. 
+
+
+## Generics
+
+O uso de Generics faz-se necessário para evitar casts excessivos e erros que podem ser encontrados em tempo de compilação, 
+antes mesmo de ir para a produção.
+
+Permitem criar elementos com tipos parametrizáveis
+
+Fornecem uma maneira de comunicar o tipo de uma coleção ou atributo ao compilador
+Verificação em tempo de compilação
+Quando o compilador conhece o tipo do elemento, ele pode verificar se o mesmo está sendo usado corretamente e pode inserir casts corretamente
+Evitam a escrita de código repetitivo e sujeito a erros de execução resultante do uso excessivo de conversores de tipo (casts)
+
+Como?
+Em Java pode-se fazer programação genérica usando-se herança (será visto mais adiante) ou variáveis de tipo
+
+Uma classe genérica terá uma ou mais variáveis de tipo
+
+O uso de variáveis de tipo torna o código mais seguro e simples de ler
+
+Convenção
+Usam-se letras maiúsculas individuais para especificar parâmetros de tipo
+Nome da variável de tipo	Significado
+E	Elemento de uma coleção.
+K	Chave de um mapa
+V	Valor em um mapa
+T	Tipo genérico
+S, U	Tipos adicionais
+Convenção
+Parâmetros de tipo são declarados entre < e > ao lado do nome da classe
+
+Uma vez declarado, um parâmetro de tipo pode ser usado no lugar de qualquer tipo de dado (declaração de variáveis e atributos, parâmetros e valores de retorno)
+
+Instanciação
+Como instanciar?
+
+NomeClasseGenerica<Tipo1, Tipo2, ... > n = new NomeClasseGenerica<>();
+Java 7: não é necessário repetir os parâmetros de tipo do lado direito da atribuição
+
+Usa-se “<>” (válido para quaisquer quantidade de parâmetros de tipo)
+Observação: a ausência do parâmetro de tipo em uma classe genérica implica na utilização do tipo Object como default (será discutido mais adiante)
+
+
