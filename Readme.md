@@ -528,6 +528,10 @@ conferindo a atualização:
     WHERE sigla='PR';
 
 
+UPDATE pessoas set nome = "ANA Pinheiro" WHERE codigo = 2;
+
+UPDATE pessoas set nome = ? WHERE codigo = ?;
+
 ##  inserindo dados com ID
 
     INSERT INTO estados( id, nome, sigla, regiao, populacao)
@@ -553,6 +557,10 @@ ou intervalo
 
 DELETE from estados
 WHERE id>=1001;
+
+## Consultas com like
+
+select * from pessoas where nome like '%j%';
 
 
 ## consulta agregada
@@ -1187,3 +1195,20 @@ Generics permitem que classes, interfaces e métodos possam ser parametrizados p
 Uso comum de generics em Coleções: Listas
 
 
+## JDBC (Java Database Connectivity)
+
+Conectividade do Bnco de Dados com java.
+
+JDBC define o conjunto de interfaces, ou seja quais os métodos que precisam estar presentes quando você construir por exemplo um driver
+para ter conectividade com outros BD.
+Várias bibliotecas usam JDBC, e eventualmente você usará o JDBC diretamente, principalmente quando você usa o uso intendivo de banco de dados.
+
+JDBC é uma API muito importante.
+
+Não usaremos Statment e sim o PrepareStament devido o SQLInjection . Ele dá uma forma segura de inserir dados através do ususario.
+Nunca concatene strings ela pode levar há uma sqlInjection.
+
+## Padrão DAO
+
+O objetivo do DAO é isolar todo o código de acesso a dados fornecendo para a aplicação métodos de mais alto nivel de fácil chamada.
+Sem se preocupar com o que ocorre no Banco de dados
