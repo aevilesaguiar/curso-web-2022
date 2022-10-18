@@ -1197,6 +1197,14 @@ Uso comum de generics em Coleções: Listas
 
 ## JDBC (Java Database Connectivity)
 
+O que é JDBC?
+Pode-se dizer que é uma API que reúne conjuntos de classes e interfaces escritas na linguagem Java na qual possibilita se conectar através 
+de um driver específico do banco de dados desejado. Com esse driver pode-se executar instruções SQL de qualquer tipo de banco de dados relacional.
+
+Para fazer a comunicação entre a aplicação e o SGBDs é necessário possuir um driver para a conexão desejada. Geralmente, as empresas de 
+SGBDs oferecem o driver de conexão que seguem a especificação JDBC para caso de algum desenvolvedor querer utilizar.
+
+
 Conectividade do Bnco de Dados com java.
 
 JDBC define o conjunto de interfaces, ou seja quais os métodos que precisam estar presentes quando você construir por exemplo um driver
@@ -1208,7 +1216,222 @@ JDBC é uma API muito importante.
 Não usaremos Statment e sim o PrepareStament devido o SQLInjection . Ele dá uma forma segura de inserir dados através do ususario.
 Nunca concatene strings ela pode levar há uma sqlInjection.
 
-## Padrão DAO
+Statement.. ou SQL Statement..., a famosa "Query". É o comando que vai ser interpretado pelo SGBD. Podem ser 4 tipos de statement:
+
+SELECT
+INSERT
+UPDATE
+DELETE
+
+O que é um Driver?
+Além de atuar como uma interface entre os SGBDs e as aplicações, também pode ser considerado como um tradutor que ajuda 
+na definição das mensagens binárias trocadas com um protocolo de um SGBD.
+
+## Pacote java.sql
+
+Esse pacote oferece a biblioteca Java o acesso e processamento de dados em uma fonte de dado. As classes e interfaces 
+mais importantes são:
+
+Classe	         |       Interface
+--------------------------------------------
+DriverManager	 |       Driver
+                 |       Connection
+                 |       Statement
+                 |       ResultSet
+                 |       PreparedStatement
+
+
+A classe DriverManager
+
+Cada driver que se deseja a usar precisa ser registrado nessa classe, pois oferece métodos estáticos para gerenciar um driver JDBC.
+
+Para a aplicação reconhecer a comunicação com o banco de dados escolhido, é preciso obter um arquivo com a extensão .jar 
+que geralmente se consegue através dos sites das empresas que distribuem o SGBD. Esse arquivo tem o objetivo ajudar no 
+carregamento do driver JDBC. Na prática de um desenvolvimento voltado a web, é criada a pasta “lib” da pasta “WEB-INF” 
+e inserido esse arquivo.
+
+A interface Connection
+
+Representa uma conexão ao banco de dados. Nessa interface são apresentados os métodos mais utilizados.
+
+Método close
+Geralmente é inserido dentro do bloco finally para realizar sempre a sua execução, pois esse método serve para fechar e liberar imediatamente um objeto Connection.
+
+Método isClosed
+Serve para verificar se o objeto Connection está fechado.
+
+Método createStatement
+É usado para criar um objeto Statement que executa instruções SQL ao banco de dados.
+
+Método prepareStatement
+É usado para criar um objeto que representa a instrução SQL que será executada, sendo que é invocado através do objeto Connetion.
+
+rollback
+Usado para retornar uma transação, sendo muito usado dentro de blocos catch em caso de alguma operação gerar erro.
+
+SUPORTE AO ALUNO
+ANOTAÇÕES
+FAVORITAR
+CONCLUÍDO
+46GOSTEI
+46
+
+
+Suporte ao aluno
+
+Anotar
+
+Marcar como concluído
+Artigos
+Java
+Aprendendo Java com JDBC
+Hoje, as aplicações são desenvolvidas através de interfaces amigáveis para que os usuários consigam trabalhar e manipular informações no banco de dados de forma facilitada.
+
+Geralmente, muitos programadores estudam o mecanismo do JDBC - Java Database Connectivity que ajudam nas aplicações com bibliotecas de baixo nível e até mesmo servem de base para as de alto nível. Portanto, abaixo serão explicados os conceitos e práticas necessárias para conseguir começar a desenvolver um sistema baseado no JDBC.
+
+O que é JDBC?
+Pode-se dizer que é uma API que reúne conjuntos de classes e interfaces escritas na linguagem Java na qual possibilita se conectar através de um driver específico do banco de dados desejado. Com esse driver pode-se executar instruções SQL de qualquer tipo de banco de dados relacional.
+
+Para fazer a comunicação entre a aplicação e o SGBDs é necessário possuir um driver para a conexão desejada. Geralmente, as empresas de SGBDs oferecem o driver de conexão que seguem a especificação JDBC para caso de algum desenvolvedor querer utilizar.
+
+O que é um Driver?
+Além de atuar como uma interface entre os SGBDs e as aplicações, também pode ser considerado como um tradutor que ajuda na definição das mensagens binárias trocadas com um protocolo de um SGBD.
+
+Para desenvolver uma aplicação baseada em uma especificação JDBC é preciso entender algumas das principais classes e interfaces apresentadas abaixo.
+
+Existe um ponto de atenção na importação das classes ou interfaces relacionadas ao pacote a ser usado no momento do desenvolvimento. Na Figura 1, é mostrado de forma correta a importação do pacote referente à classe Connection pertencente ao pacote java.sql. Esse é um fator a ser observado com cautela, pois isso é considerado um dos erros mais comuns justamente pelo fato do desenvolvedor pensar muitas vezes em usar o pacote com.mysql.jdbc sendo que está utilizando o driver JDBC do banco MySQL.
+
+Importação da classe Connection
+Figura 1: Importação da classe Connection
+
+Pacote java.sql
+Esse pacote oferece a biblioteca Java o acesso e processamento de dados em uma fonte de dado. As classes e interfaces mais importantes são:
+
+Classe	Interface
+DriverManager	Driver
+Connection
+Statement
+ResultSet
+PreparedStatement
+A classe DriverManager
+Cada driver que se deseja a usar precisa ser registrado nessa classe, pois oferece métodos estáticos para gerenciar um driver JDBC.
+
+Para a aplicação reconhecer a comunicação com o banco de dados escolhido, é preciso obter um arquivo com a extensão .jar que geralmente se consegue através dos sites das empresas que distribuem o SGBD. Esse arquivo tem o objetivo ajudar no carregamento do driver JDBC. Na prática de um desenvolvimento voltado a web, é criada a pasta “lib” da pasta “WEB-INF” e inserido esse arquivo.
+
+No caso apresentado na Figura 2, apenas foi criado à pasta “lib” por ser um projeto Java puro e adicionado a biblioteca copiada para dentro do projeto.
+
+Adicionando a biblioteca MySQL Connector no projeto.
+Figura 2: Adicionando a biblioteca MySQL Connector no projeto.
+
+Listagem 1: Carregando o driver MySQL.
+
+try {
+//Carrega o driver especificado
+Class.forName("com.mysql.jdbc.Driver");
+} catch (ClassNotFoundException e) {
+System.out.println("Driver não encontrado!"+e);
+}
+Após o driver estar inicializado, pode-se abrir uma conexão através do método getConection da classe DriverManager. Esse método possui três sobrecargas apresentado na Listagem 2.
+
+Listagem 2: Sobrecarga do método getConnection.
+
+public static Connection getConnection(String url)
+public static Connection getConnection(String url, Properties info)
+public static Connection getConnection(String url, String user, String password)
+A interface Connection
+Representa uma conexão ao banco de dados. Nessa interface são apresentados os métodos mais utilizados.
+
+Método close
+Geralmente é inserido dentro do bloco finally para realizar sempre a sua execução, pois esse método serve para fechar e liberar imediatamente um objeto Connection.
+
+Método isClosed
+Serve para verificar se o objeto Connection está fechado.
+
+Método createStatement
+É usado para criar um objeto Statement que executa instruções SQL ao banco de dados.
+
+Listagem 3: Método que cria uma conexão com o banco de dados.
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectionFactory {
+
+	public static Connection createConnection() throws SQLException{
+		String url = "jdbc:mysql://localhost:3306/loja"; //Nome da base de dados
+		String user = "root"; //nome do usuário do MySQL
+		String password = "root"; //senha do MySQL
+
+		Connection conexao = null;
+		conexao = DriverManager.getConnection(url, user, password);
+
+		return conexao;
+	}
+}
+Método prepareStatement
+É usado para criar um objeto que representa a instrução SQL que será executada, sendo que é invocado através do objeto Connetion.
+
+Listagem 4: Exemplo da execução de uma instrução SQL através do prepareStatement
+
+String sql = "INSERT INTO loja (nome,sobrenome,idade,salario) VALUES ('Mario','Corleone','28','2322.39')";
+//Prepara a instrução SQL
+PreparedStatement ps = conexao.prepareStatement(sql);
+//Executa a instrução SQL
+ps.execute();
+setAutoCommit
+Esse método aceita como parâmetro um valor booleano (true ou false), no qual consegue definir se todas as instruções executadas serão gravadas (comitadas). Por padrão, quando finalizada uma instrução de INSERT, UPDATE ou DELETE a operação de gravação (commit) é executada automaticamente sem a necessidade de invocar o método setAutoCommit. Agora, para instruções de SELECT, a gravação dos dados ocorre quando o conjunto de dados associados é fechado, ou seja, quando invocado o método close.
+
+rollback
+Usado para retornar uma transação, sendo muito usado dentro de blocos catch em caso de alguma operação gerar erro.
+
+Listagem 5: Exemplos do método setAutoCommit, rollback e commit.
+
+try {
+conexao.setAutoCommit(false);
+ps = conexao.prepareStatement(sql);
+ps.executeUpdate();
+
+	//Grava as informações se caso de problema os dados não são gravados
+	conexao.commit();
+
+} catch (SQLException e ) {
+if (conexao != null) {
+try {
+System.err.print("Rollback efetuado na transação");
+conexao.rollback();
+} catch(SQLException e2) {
+System.err.print("Erro na transação!"+e2);
+}
+}
+} finally {
+if (ps != null) {
+ps.close();
+}
+conexao.setAutoCommit(true);
+}
+A interface Statement
+Nesta interface são listados os métodos executeQuery e executeUpdate que são considerados os mais importantes referente 
+a execução de uma query.
+
+executeQuery - Executa uma instrução SQL que retorna um único objeto ResultSet.
+executeUpdate - Executa uma instrução SQL referente a um INSERT, UPDATE e DELETE. Esse método retorna a quantidade 
+de registros que são afetados pela execução do comando SQL.
+
+Interface ResultSet
+Representa o conjunto de resultados de uma tabela no banco de dados. Esse objeto mantém o cursor apontando para a sua 
+linha atual de dados, sendo que seu início fica posicionado na primeira linha.
+
+Além disso, esse objeto fornece métodos getters referentes aos tipos de dados como: getInt, getString, getDouble, 
+getFloat, getLong entre outros. Com esses métodos são possíveis recuperar valores usando, por exemplo, o nome da 
+coluna ou número do índice.
+
+
+## Padrão DAO(Data Acces Object)
 
 O objetivo do DAO é isolar todo o código de acesso a dados fornecendo para a aplicação métodos de mais alto nivel de fácil chamada.
-Sem se preocupar com o que ocorre no Banco de dados
+Sem se preocupar com o que ocorre no Banco de dados.
+
+JDBC é um requisito o DAO.
+
+
