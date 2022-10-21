@@ -1427,69 +1427,136 @@ getFloat, getLong entre outros. Com esses métodos são possíveis recuperar val
 coluna ou número do índice.
 
 
-## Padrão DAO(Data Acces Object)
 
-O objetivo do DAO é isolar todo o código de acesso a dados fornecendo para a aplicação métodos de mais alto nivel de fácil chamada.
-Sem se preocupar com o que ocorre no Banco de dados.
-
-JDBC é um requisito o DAO.
+## NoSql (Not only SQL - Não apenas SQL)
 
 
-## JPA (JAVA PERSISTENSE API)
+Os BD não relacionais podem eventualmente usar SQL ou variações de SQL na hora de consultar ou persistir os dados.
+No caso do MongoDB ele usa uma API própria para consultar/persisrit dados.
 
-Especificações do JPA
+Classificação dos BD não Relacionais em 4 grandes grupos:
 
-Padrão de Projeto Data Mapper.
-ORM Mapeamento Objeto Relacional 
+Nós temos os BD baseados em:
+- chave Valor
+- documentos
+- grafo
+- Column Family Data Base
 
-JPA (ou Java Persistence API) é uma especificação oficial que descreve como deve ser o comportamento dos frameworks de 
-persistência Java que desejarem implementá-la.
+![](.Readme_images/6229c682.png)
 
-Ser uma especificação significa que a JPA não possui código que possa ser executado.
+Redis: O Redis é um armazenamento de estrutura de dados na memória, usado
+como um banco de dados de valor-chave na memória distribuído, cache e agente
+de mensagens, com durabilidade opcional. O Redis oferece suporte a diferentes
+tipos de estruturas de dados abstratas, como strings, listas, mapas, conjuntos,
+conjuntos classificados, HyperLogLogs, bitmaps, fluxos e índices espaciais
 
-Por analogia, você pode pensar na especificação JPA como uma interface que possui algumas assinaturas, mas que precisa 
-que alguém a implemente.
+MongoDB: é um programa de banco de dados orientado a documentos
+multiplataforma disponível na fonte. Classificado como um programa de banco de
+dados NoSQL, o MongoDB usa documentos semelhantes a JSON com esquemas
+opcionais.
 
-Apesar de não ter nada executável, a especificação possui algumas classes, interfaces e anotações que ajudam o 
-desenvolvedor a abstrair o código.
+Neo4j: é um sistema de gerenciamento de banco de dados gráfico desenvolvido
+pela Neo4j, Inc. Descrito por seus desenvolvedores como um banco de dados
+transacional compatível com ACID com armazenamento e processamento gráfico nativo.
 
-São artefatos do pacote javax.persistence que ajudam a manter o código independente das implementações da especificação.
+O Cassandra: é um sistema de gerenciamento de banco de dados NoSQL gratuito
+e de código aberto, distribuído e com colunas amplas, projetado para lidar com
+grandes quantidades de dados em muitos servidores comuns, fornecendo alta
+disponibilidade sem ponto único de falha.
 
-Assim não precisamos importar classes de terceiros em nosso código.
+Bigtable: é um serviço de banco de dados NoSQL de valor-chave e colunas amplas
+totalmente gerenciado para grandes cargas de trabalho analíticas e operacionais
+como parte do portfólio do Google Cloud.(Armazenamento de Valores-chave e também
+de colunas.
 
-Implementação é quem dá vida para a especificação. É o código que podemos executar, que chamamos de framework.
 
-Enfim, para persistir dados com JPA, é preciso escolher uma implementação que é quem, de fato, vai fazer todo o trabalho.
+**GRAPQL(biblioteca do facebook)) é uma alternativa de APIS webservices do tipo REST,  Você consegue pegar uma API
+que não foi modelada como grafo e organizar os dados em grafo. 
 
-Mapeamento Objeto Relacional é a representação de uma tabela de um banco de dados relacional através de classes Java.
 
-É também conhecido como ORM ou Object Relational Mapping.
+## Escalonamento Banco Relacional VS Não relacional
 
-Banco de dados	Linguagem Orientada a Objetos
+Escalonamento de dados: tornar a nossa base de dados  robusta o suficiente para atender milhares e milhares e até milhões
+de requisições simultâneamente.
 
-Tabela  	Classe
-Coluna   	Atributo
-Registro	Objeto
+Temos o Escalonamento Vertical VS Horizontal
 
-Para completar, temos as anotações que adicionarão metadados às classes e permitirão os frameworks ORM, como Hibernate ou EclipseLink, entrarem em ação.
+ - Scaling up(Escalonamento Vertical)
+O escalonamento vertical é colocar mais capacidade de memória (principal e/ou de massa) e processamento. Ou seja, 
+é comprar um hardware mais poderoso para dar conta do recado.
 
-Algumas muito usadas são:
+Em alguns casos basta criar mais processos/threads que está fazendo o scaling up, desde que o hardware já suporte esse 
+aumento. Há casos que separar o banco de dados em vários dispositivos de armazenamento já seja uma escala vertical, 
+novamente é escalar na mesma máquina.
 
-@Entity
-@Table
-@Id
-@Column
+O investimento é basicamente em hardware. Comprando mais processador. memória e armazenamento já tem uma capacidade aumentada.
 
-## Data mapper
+Em alguns casos é mais questão de fazer uma simples configuração para alcançar o que o hardware único já suporta.
 
-Data Mapper trata da forma como você controla a sua camada de persistencia em um projeto Orientado a Objetos em bases Relacionais.
-O Data Mapper Pattern é um padrão arquitetural introduzido por Martin Fowler em seu livro Patterns of Enterprise Application Architecture .
-Um Mapeador de Dados é um tipo de Camada de Acesso a Dados que realiza transferência bidirecional de dados entre objetos na 
-memória e armazenamento persistente. Com o Padrão Mapeador de Dados, os objetos na memória não têm ideia de que existe um banco
-de dados e o esquema do banco de dados não tem conhecimento de nenhum objeto que o utilize. Essa separação é o objetivo 
-principal de um Mapeador de Dados.
+Também pode ser otimizar a aplicação para que ela desempenhe melhor e atenda mais do que fazia antes
 
-ORM : a ideia de você mapear cada um dos atributos e cada Objeto que representa o modelo da sua aplicação e mapear isso para a tabela dos BD.
+- Scaling out(Escalonamento Horizontal)
+  O escalonamento horizontal é colocar mais computadores para dar conta do recado. Claro que eles adicionam mais 
+- capacidade de processamento e memória também, na soma total.
+
+É muito mais complexo fazer um escalonamento horizontal tanto do ponto de vista de gerenciamento quanto do ponto de vista 
+de programação, ainda que existam ferramentas para facilitar. Não é só colocar os computadores, eles precisam "se falar" 
+de forma consistente e adequada. Na verdade isso é considerado o problemas mais difícil de resolver na computação.
+
+Por incrível que pareça pode ser mais barato que o vertical, pelo menos no custo da aquisição da infraestrutura já 
+que é possível adquirir hardware mais simples e mais comum que costuma ser mais barato pela escala de produção. Claro 
+que o custo de gerenciamento e desenvolvimento pode mudar o custo total.
+
+Fora os casos que o vertical não comportaria a necessidade, afinal essa estratégia tem um limite que em tese o 
+horizontal não tem, o horizontal tem a vantagem de ser mais tolerante a falhas, ou pelo menos ser mais fácil ter 
+a operação de volta em caso de alguma falha.
+
+Escalonamento Horizontal você adiciona mais máquinas em seu pool de recursos enquanto escalonamento Vertical significa 
+que você adiciona mais poder (CPU, RAM) para uma máquina existente.
+
+Em um banco de dados Horizontal é muitas vezes baseada no particionamento dos dados, ou seja, cada nó contém apenas parte 
+dos dados.
+
+No banco de dados Vertical os dados residem em um único nó e o dimensionamento é feito através de multi-core, ou seja, 
+espalha a carga entre o CPU e a memória RAM.
+
+No escalonamento horizontal muitas vezes é mais fácil de redimensionar dinamicamente adicionando mais máquinas, já na 
+Vertical é muitas vezes limitada à capacidade de uma única máquina escalonar,além de que a capacidade muitas vezes 
+envolve o tempo de inatividade e vem com um limite superior.
+
+Exemplo escalonamento horizontal: Cassandra, MongoDB..
+
+Exemplo escalonamento vertical MySQL - Amazon RDS (A versão nuvem de MySQL). Ele fornece uma maneira fácil de escalar 
+verticalmente, passando de pequenos para máquinas maiores. Este processo envolve muitas vezes o tempo de inatividade.
+
+In-Memory Dados Grids como GigaSpaces XAP , Coerência etc .. são frequentemente otimizado tanto para escalonamento 
+horizontal e vertical, simplesmente porque não é obrigado a disco. Horizontal através de particionamento e vertical 
+através de apoio multi-core.
+
+Só para contextualização, o que gera a necessidade de fazer algum tipo de escalonamento é que o crescimento do acesso 
+à internet fez com que as grandes redes sociais, sistemas de buscas, entre outros, recebessem uma grande quantidade de 
+dados. Devido a esse crescimento, uma grande quantidade de dados é gerada e esses dados são valiosos, visto que são 
+utilizados como fonte de informação para tomada de decisões estratégicas e mineração de dados.
+
+Os Bancos de Dados Relacionais são mais fáceis de serem escalados de forma vertical, mas isso não qur dizer que eles não 
+podem ser feitos de forma horizontal, mas o desafio é maior .
+Já os Bancos de Dados Não relacional você consegue separar os dados em multiplas instancias (várias máquinas diferentes).
+
+
+## Mongo DB
+
+É um BD baseado em documento, e esse documetno é o JSON, esse é o formato que vamos armazenar dentro do MongoDB.
+
+o MongoDB tem o DataBase que é o BD(SCHEMA em outros bancos tipo mysql).
+Dentro de uma única instancia do MongoDB nós podemos ter várias instancias do BD. 
+Dentro do Banco de dados nós temos a Collections que são equivalentes a tabelas no BD relacional.
+E dentro das collections você tem os documents que são relativos a linhas/tuplas/registros de uma tabela dentro do BD.
+O MongoDB é um banco sem schema, ou seja você pode inserir dados numa coleção que nem existe, dentro de um documento
+ter vários relacionamentos.
+No MongoDB não usamos SQL, usamos uma API
+
+## Comandos Básicos MongoDB
+
 
 
 

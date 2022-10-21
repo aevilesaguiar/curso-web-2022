@@ -1,0 +1,225 @@
+show dbs -> mostra todos os bancos de dados disponiveis
+
+use wm _> usa o banco de dados
+
+db.createCollection('estados') = criar uma coleção (que é uma tabela)
+
+show collections -> mostra as coleções( tabelas)
+
+O mongo DB ele é caseSensitive
+
+db.estados.drop() ->exclui o banco
+
+
+## Inserir dados dentro de uma coleção
+
+db.estados.insert({nome: "Acre", sigla:" AC", regiao:" Norte"})
+
+
+## Inserir e atualizar ( eu inclui um atributo a mais e não haverá problema por que o mongo não possui schema, ele não reclama senão tem o mesmo formalismos
+que tem no banco relacional)
+
+db.estados. save({nome: "Alagoas", sigla:"Al", regiao: "Nordeste", populacao: 3325685555})
+
+## Consulta dos dados, ele mostra todos os dados que foram inseridos
+
+db.estados.find()
+
+## cONSULTA DE DADOS COM formato JSON (pretty formata os dados)
+
+db.estados.find().pretty()
+
+## Dentro de uma coleção eu posso armazenar estado e cidade(insere no banco)
+
+db.insert({
+nome: "Rio de Janeiro",
+regiao: "Sudeste",
+cidades: [{
+nome: "Niteroi",
+area:133.9
+}]
+})
+
+
+Cada registro representa um documento no formato json, tem mais flexibilidade.
+
+## mostra todos os comandos
+
+db.help()
+
+## Desafio Inserir Estado
+
+ObjectId(): essa função gera um hash que vai ser do tipo objectId que vai se associar ao atributo _Id
+
+db.estados.insert({
+    nome: "São Paulo",
+    sigla: "SP",
+    regiao: "Sudeste",
+    cidades:[{
+        _id: ObjectId(),
+        nome: "Campinas",
+        area: 795,63,
+        populacao:1252555}
+        , {
+        _id: ObjectId(),
+        nome: "Diadema",
+        area: 795,63,
+        populacao:1252555
+        },
+        {
+        _id: ObjectId(),
+        nome: "Sorocaba",
+        distanciaCapital: 87,
+        area: 795,63,
+        populacao:1252555
+}]
+})
+
+## sair
+
+quit()
+
+## Consultas
+
+
+db.estados.find()
+db.estados.find().pretty()
+
+- pega um único registro
+db.estados.findOne()
+
+ou
+
+db.estados.findOne({sigla:"RJ"})
+db.estados.findOne({sigla:"RJ"}).pretty()
+
+
+-dentro dos filtros podemos usar os operadores and, ou... usamos o operador $
+
+db.estados.find({$or: [{sigla:"RJ"},{sigla:"AC"}]}).pretty()
+db.estados.find({$and: [{sigla:"RJ"},{sigla:"AC"}]}).pretty()
+
+
+- verificar se um atributo está presente ou não , ou seja se tem população?
+
+db.estados.find({populacao: {$exists: true}})
+
+
+- consultas paginadas temos dois métodos
+
+db.estados.find().skip(1)
+
+db.estados.find().skip(1).limit(2)
+
+-verificar a quantidade que você quer paginar
+db.estados.count()
+
+- filtrar por atributos
+
+db.estados.find({sigla: "SP"},{nome:1})
+
+- quando eu quero filtrar sem mostrar o id incluo como 0
+
+db.estados.find({sigla: "SP"},{nome:1, sigla:1, _id:0})
+
+- filtrar pelo o nome das cidades sem o id
+
+db.estados.find({sigla: "SP"},{cidades.nome:1, _id:0})
+
+
+- consultas mais avançadas (agregate)
+https://www.mongodb.com/docs/manual/reference/operator/aggregation/match/#mongodb-pipeline-pipe.-match
+
+db.collection.aggregate() Stages
+
+operadores:
+https://www.mongodb.com/docs/manual/reference/operator/aggregation/
+
+- usando apenas um estagio de agregação
+
+$project: Remodela cada documento no fluxo, por exemplo, adicionando novos campos ou removendo campos existentes. Para cada documento de entrada, gera um documento.
+
+quando eu uso o atributo do lado esquerdo eu não preciso usar o $
+
+db.estados.aggregate([{ $project :{nome:1, cidades.nome:1, _id:0}}
+])
+
+
+usando mais de um estado de agregação
+
+quando eu uso o atributo do lado direito eu preciso usar o $, para que ele entenda que precisa interpolar esse valor {$sum: "cidades.populacao"} , ou seja esse valor precisa ser resolvido
+
+db.estados.aggregate([{ $project :{populacao: {$sum: "cidades.populacao"}, sigla:1, _id:0}}
+])
+
+- nessa consulta eu quero pesquisar dentro da coleção de estado qual o estado que tem a cidade de Sorocaba, e extrai dentro dela o id
+
+$match: Filtra o fluxo de documentos para permitir que apenas documentos correspondentes passem sem modificações para o próximo estágio do pipeline.
+$match usa consultas padrão do MongoDB. Para cada documento de entrada, gera um documento (uma correspondência) ou zero documentos (sem correspondência).
+
+$unwind: Desconstrói um campo de matriz dos documentos de entrada para gerar um documento para cada elemento. Cada documento de saída substitui a
+ matriz por um valor de elemento. Para cada documento de entrada, gera n documentos onde n é o número de elementos da matriz e pode ser zero para uma matriz vazia.
+
+
+ db.estados.aggregate([
+        { $match :{"cidades.nome":"Sorocaba"}},
+        { $unwind: "$cidades"},
+        { $match: {"cidades.nome":"Sorocaba"}},
+        { $project :{ _id: "$cidades._id"}}
+ ]).pretty()
+
+
+## Atualizar os dados
+
+db.estados.update({sigla: "SP"},{$set: {populacao: 4334000000}})
+
+
+db.estados.update({sigla: "SP"},{$set: {cidades:[{nome: "Sergipe"}]}})
+
+
+- adiciona o atributo dentro do objeto cidade
+
+db.estados.update(
+            {sigla: "SP"},
+            {$push:{cidades: "Santos", população: 433966}}
+            })
+
+
+db.estados.find({populacao:{$exists: true}},{ _id:0, nome: 1} )
+
+
+
+## Remoções
+
+db.estados.count() -> verificar quantos registros temos
+
+db.estados.remove({sigla:"AC"}) -> remover o registro
+
+db.estados.remove({populacao:{$exists: true},1 })
+
+## Lookup
+
+$lookup: Executa uma junção externa esquerda para outra coleção no mesmo banco de dados para filtrar documentos da coleção "ingressada" para processamento.
+
+lookup mais simples
+
+db.empresas.aggregate([
+    {$match:{nome: "Bradesco"}},
+    {$lookup:{
+    from: "estados",
+    localField: "estadosId",
+    foreignField:"_id",
+    as: "estado"
+    }}
+    ]).pretty()
+
+
+
+
+
+
+
+
+
+
+
